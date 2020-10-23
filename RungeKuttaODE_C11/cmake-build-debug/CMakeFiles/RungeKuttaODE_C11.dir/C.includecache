@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/main.c
+stdio.h
+-
+math.h
+-
+nrutil.h
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nrutil.h
+nr.h
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nr.h
+
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nr.h
+stdio.h
+-
+
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nrutil.h
+
