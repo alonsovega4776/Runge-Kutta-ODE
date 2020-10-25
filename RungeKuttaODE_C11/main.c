@@ -3,13 +3,18 @@
 #include "nrutil.h"
 #include "prototype_declarations.h"
 
-int k_max, count;
-float *t_p, **x_p, dt_save;
+int K_max_main, K_main;
+float *t_main, **X_main, dt_main;
 
 int main(int argc, char *argv[])
 {
-    int i = 0;
-    LOOP(i,0,10) printf("%d", i);
+
+
+
+
+
+
+
 
     return 0;
 }

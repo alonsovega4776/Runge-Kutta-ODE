@@ -32,18 +32,30 @@ void rungeKutta_stepper(float *x, float *xDot, int N, float *t, float Δ_try, fl
                         float *x_scale, float *Δ_did, float *Δ_next, void (*f)(float, float[], float[], int))
 {	
 	int i = 0;
-	float ε, Δ, Δ_temp, Δ_max, t_new, *e, *x_temp;
+	float ε, Δ, Δ_temp, Δ_max, t_new, *e, *x_temp, *ε_vect;
 
     e      = vector(1, N);
     x_temp = vector(1, N);
+    ε_vect = vector(1, N);
 
     Δ = Δ_try;			// trial
 	while(1)
 	{
         rungeKutta(x, xDot, N, *t, Δ, e, x_temp, f);	            // take a step
 		
-		ε = 0.0;										            // eval. acc.
-		LOOP(i,1,N) ε = FMAX(ε, fabs(e[i] / x_scale[i]));    // get worst error
+		ε = 0.0;										            // eval. acc. error
+        LOOP(i,1,N) ε_vect[i] = e[i] / x_scale[i];
+
+        ///*---------------------------------------Worst Offender
+        LOOP(i,1,N) ε = FMAX(ε, fabs(ε_vect[i]));           // get worst error
+        //*/---------------------------------------Worst Offender
+
+        /*---------------------------------------L2 Norm
+        ε = inner_product(ε_vect, ε_vect, N);
+        ε /= N;
+        ε = sqrt(ε);
+        //*///-------------------------------------L2 Norm
+
         ε /= TOL;										            // scaled relative to tolerance
         if (ε <= 1.0) break;							            // step succeeded
         //ELSE truncations error too large
@@ -66,4 +78,5 @@ void rungeKutta_stepper(float *x, float *xDot, int N, float *t, float Δ_try, fl
 	
 	free_vector(x_temp, 1, N);
 	free_vector(e     , 1, N);
+	free_vector(ε_vect, 1, N);
 }
