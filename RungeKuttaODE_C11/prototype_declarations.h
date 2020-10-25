@@ -11,7 +11,7 @@ void rungeKutta(float *x_n, float *xDot, int N, float t, float Δ, float *x_nPlu
                 void (*f)(float, float [], float [], int));
 void rungeKutta_stepper(float *x, float *xDot, int N, float *t, float Δ_try, float TOL, float *x_scale, float *Δ_did, float *Δ_next,
                         void (*f)(float, float [], float [], int));
-void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ_1, float Δ_min, int *n_ok, int *n_bad,
+void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ_1, float Δ_min, int *n_good, int *n_bad,
                 void (*f)(float, float [], float [], int),
                 void (*rungeKutta_stepper)(float [], float [], int, float *, float, float, float [], float *, float *,
                         void (*)(float, float [], float [], int)));
