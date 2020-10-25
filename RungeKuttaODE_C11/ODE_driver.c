@@ -27,35 +27,34 @@
 #define A_TOL       0.001
 #define R_TOL       0.001
 
-extern int K_max_main, K_main;
-extern float *t_main, **X_main, dt_main;
+extern struct ODEsolution odeSol;
 
 void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ_1, float Δ_min, int *n_good, int *n_bad,
-                void (*f)(float, float [], float [], int),
-                void (*rungeKutta_stepper)(float [], float [], int, float *, float, float, float [], float *, float *,
-                        void (*)(float, float [], float [], int)))
+                void (*f)(float, float [], float**, int),
+                void (*rungeKutta_stepper)(float [], float**, int, float *, float, float, float [], float *, float *,
+                        void (*)(float, float [], float**, int)))
 {
 	int i = 0, n_step = 0;
     float t_save, t_n, Δ_next, Δ_did, Δ;
-	float *x_scale_n, *x_n, *xDot_n;
+	float *x_scale_n, *x_n, **xDot_n;
 
     x_scale_n = vector(1, N_var);
     x_n       = vector(1, N_var);
-    xDot_n    = vector(1, N_var);
+    xDot_n    = matrix(1, N_var,1,1);
 
     t_n = t_1;
     Δ = SIGN(Δ_1, t_2 - t_1);
-    *n_good = (*n_bad) = K_main = 0;
+    *n_good = (*n_bad) = odeSol.K = 0;
 	LOOP(i, 1, N_var) x_n[i] = x_0[i];
-	
-	if (K_max_main > 0) t_save = t_n - dt_main * 2.0; // to save first step
+
+	if (odeSol.K_max > 0) t_save = t_n - odeSol.dt * 2.0; // to save first step
 	
 	LOOP(n_step, 1, MAX_STEP)
 	{
-		(*f)(t_n, x_n, xDot_n, 0);                    // note: note not passing a matrix, passing xDot in R^N_vars
+		(*f)(t_n, x_n, xDot_n, 1);                    // note: note not passing a matrix, passing xDot in R^N_vars
 
 		///*------------------------------Using absolute and relative tolerance
-        LOOP(i, 1, N_var) x_scale_n[i] = fabs(x_n[i]) + fabs(xDot_n[i] * Δ) + SCALE_BIAS;
+        LOOP(i, 1, N_var) x_scale_n[i] = fabs(x_n[i]) + fabs(xDot_n[i][1] * Δ) + SCALE_BIAS;
         //*///--------------------------Using absolute and relative tolerance
 
         /*------------------------------Using absolute and relative tolerance
@@ -63,10 +62,10 @@ void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ
         else nrerror("NEED K_max_main != 0 IN ODE_driver.c");
         //*///--------------------------Using absolute and relative tolerance
 
-        if (K_max_main > 0 && K_main < K_max_main - 1 && fabs(t_n - t_save) > fabs(dt_main))
+        if (odeSol.K_max > 0 && odeSol.K < odeSol.K_max - 1 && fabs(t_n - t_save) > fabs(odeSol.dt))
 		{
-            t_main[++K_main] = t_n;
-			LOOP(i, 1, N_var) X_main[i][K_main] = x_n[i];        // store intermediate results
+            odeSol.t_vector[++odeSol.K] = t_n;
+			LOOP(i, 1, N_var) odeSol.X_matrix[i][odeSol.K] = x_n[i];        // store intermediate results
             t_save = t_n;
 		}
 		if ((t_n + Δ - t_2) * (t_n + Δ - t_1) > 0.0) Δ = t_2 - t_n; // overshoot in [t_1, t_2] protection
@@ -77,13 +76,13 @@ void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ
 		if ((t_n - t_2)*(t_2 - t_1) > 0.0)                          // done?
 		{
 			LOOP(i, 1, N_var) x_0[i] = x_n[i];                  // modify IC
-			if (K_max_main)
+			if (odeSol.K_max)
 			{
-                t_main[++K_main] = t_n;
-				LOOP(i, 1, N_var) X_main[i][K_main] = x_n[i];    // final result
+                odeSol.t_vector[++odeSol.K] = t_n;
+				LOOP(i, 1, N_var) odeSol.X_matrix[i][odeSol.K] = x_n[i];    // final result
 			}
 
-			free_vector(xDot_n   , 1, N_var);
+			free_matrix(xDot_n   , 1, N_var,1,1);
 			free_vector(x_n      , 1, N_var);
 			free_vector(x_scale_n, 1, N_var);
 			return;	

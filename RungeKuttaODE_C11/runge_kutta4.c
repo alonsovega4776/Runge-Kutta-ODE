@@ -13,7 +13,8 @@
 
 #define N_w  4
 
-void rungeKutta_4(float *x_n, float *xDot_n, int N, float t_n, float Δ, float *x_nPlus1, void (*f)(float, float [], float [], int))
+void rungeKutta_4(float *x_n, float **xDot_n, int N, float t_n, float Δ, float *x_nPlus1,
+                  void (*f)(float, float [], float**, int))
 {
 	int i = 0, j = 0;
 	float t_Δ, Δ_div2, *x_next, **xDot_next, *w, *xDot_vect;
@@ -26,12 +27,12 @@ void rungeKutta_4(float *x_n, float *xDot_n, int N, float t_n, float Δ, float *
     w[4] = 1.0/6.0;
 
 	x_next    = vector(1, N);
-	xDot_next = matrix(1, 3,1,N);
+	xDot_next = matrix(1, N_w-1,1,N);
 
 	Δ_div2  = Δ/2.0;		// = h/2 (half step)
 	t_Δ = t_n + Δ_div2;		// = t + Δ/2
 
-	LOOP(i, 1, N) x_next[i] = x_n[i] + Δ_div2 * xDot_n[i];		   //1st step
+	LOOP(i, 1, N) x_next[i] = x_n[i] + Δ_div2 * xDot_n[i][1];		   //1st step
 	(*f)(t_Δ, x_next, xDot_next, 2);								       //2nd step
     LOOP(i, 1, N) x_next[i] = x_n[i] + Δ_div2 * xDot_next[1][i];
 	(*f)(t_Δ, x_next, xDot_next, 3);							           //3rd step
@@ -41,7 +42,7 @@ void rungeKutta_4(float *x_n, float *xDot_n, int N, float t_n, float Δ, float *
     xDot_vect = vector(1,N_w);
     LOOP(i, 1, N)
     {
-        xDot_vect[1] = xDot_n[i];
+        xDot_vect[1] = xDot_n[i][1];
         LOOP(j,1,N_w-1) xDot_vect[j+1] = xDot_next[j][i];
 
         x_nPlus1[i] = x_n[i] + Δ*inner_product(w, xDot_vect, N_w);

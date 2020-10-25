@@ -28,8 +28,9 @@
 #define FACTOR_MAX          5.0
 #define FACTOR_MIN          (1.0/10.0)
 
-void rungeKutta_stepper(float *x, float *xDot, int N, float *t, float Δ_try, float TOL,
-                        float *x_scale, float *Δ_did, float *Δ_next, void (*f)(float, float[], float[], int))
+void rungeKutta_stepper(float *x, float **xDot, int N, float *t, float Δ_try, float TOL,
+                        float *x_scale, float *Δ_did, float *Δ_next,
+                        void (*f)(float, float[], float**, int))
 {	
 	int i = 0;
 	float ε, Δ, Δ_temp, Δ_max, t_new, *e, *x_temp, *ε_vect;
@@ -56,7 +57,7 @@ void rungeKutta_stepper(float *x, float *xDot, int N, float *t, float Δ_try, fl
         ε = sqrt(ε);
         //*///-------------------------------------L2 Norm
 
-        ε /= TOL;										            // scaled relative to tolerance
+        ε /= TOL;										            // scaled relative to overall tolerance
         if (ε <= 1.0) break;							            // step succeeded
         //ELSE truncations error too large
         // reduce stepsize_________________________________________________________________________________

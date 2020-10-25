@@ -16,10 +16,9 @@
 #include "nrutil.h"
 #include "prototype_declarations.h"
 
-#define ORDER_PLUS1 6
 
-void rungeKutta(float *x_n, float *xDot, int N, float t, float Δ, float *x_nPlus1, float *e,
-                void (*f)(float, float[], float[], int))
+void rungeKutta(float *x_n, float **xDot, int N, float t, float Δ, float *x_nPlus1, float *e,
+                void (*f)(float, float[], float**, int))
 {
 	int i_1 = 0, i_2 = 0, i = 0;
 	static float *w_Δ, **W, *w, *w_star, *δ;
@@ -62,7 +61,7 @@ void rungeKutta(float *x_n, float *xDot, int N, float t, float Δ, float *x_nPlu
 	F = matrix(1,N,1,ORDER_PLUS1);
     LOOP(i_1,1,ORDER_PLUS1)
         LOOP(i_2,1,N) F[i_1][i_2] = 0.0;
-    LOOP(i,1,N) F[i][1] = xDot[i];
+    LOOP(i,1,N) F[i][1] = xDot[i][1];
 
     float *x_temp;
     x_temp = vector(1, N);
