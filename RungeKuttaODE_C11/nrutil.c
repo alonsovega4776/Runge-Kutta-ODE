@@ -286,3 +286,12 @@ void free_f3tensor(float ***t, long nrl, long nrh, long ncl, long nch,
 	free((FREE_ARG) (t[nrl]+ncl-NR_END));
 	free((FREE_ARG) (t+nrl-NR_END));
 }
+
+float inner_product(float * v_1, float * v_2, int M)
+{
+    float result = 0.0;
+    int i = 0;
+
+    LOOP(i, 1, M) result += v_1[i] * v_2[i];
+    return result;
+}

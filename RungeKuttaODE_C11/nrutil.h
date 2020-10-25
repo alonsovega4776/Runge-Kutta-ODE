@@ -1,6 +1,8 @@
 #ifndef _NR_UTILS_H_ /* _NR_UTILS_H_ */
 #define _NR_UTILS_H_
 
+#define LOOP(i, t_0, t_f) for(i = t_0;i <= t_f;i++)
+
 static float sqrarg;
 #define SQR(a) ((sqrarg=(a)) == 0.0 ? 0.0 : sqrarg*sqrarg)
 
@@ -66,5 +68,6 @@ void free_submatrix(float **b, long nrl, long nrh, long ncl, long nch);
 void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch);
 void free_f3tensor(float ***t, long nrl, long nrh, long ncl, long nch,
 	long ndl, long ndh);
+float inner_product(float * v_1, float * v_2, int M);
 
 #endif /* _NR_UTILS_H_ */

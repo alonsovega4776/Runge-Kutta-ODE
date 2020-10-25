@@ -6,19 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/main.c
-stdio.h
--
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/ODE_driver.c
 math.h
 -
 nrutil.h
 /Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nrutil.h
-nr.h
-/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nr.h
-
-/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nr.h
-stdio.h
--
+prototype_declarations.h
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/prototype_declarations.h
 
 /Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/nrutil.h
+
+/Users/xXxMrMayhemxXx/Documents/GitHub/Runge-Kutta-ODE/RungeKuttaODE_C11/prototype_declarations.h
 
