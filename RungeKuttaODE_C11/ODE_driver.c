@@ -21,11 +21,12 @@
 #include <math.h>
 #include "nrutil.h"
 #include "prototype_declarations.h"
+#include <stdio.h>
 
 #define MAX_STEP   10000
 #define SCALE_BIAS 1.0e-30
-#define A_TOL       0.001
-#define R_TOL       0.001
+#define A_TOL       0.01
+#define R_TOL       0.01
 
 extern struct ODEsolution odeSol;
 
@@ -54,12 +55,13 @@ void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ
 	{
 		(*f)(t_n, x_n, xDot_n, 1);                    // note: note not passing a matrix, passing xDot in R^N_vars
 
-		///*------------------------------Using absolute and relative tolerance
+		/*------------------------------Using absolute and relative tolerance
         LOOP(i, 1, N_var) x_scale_n[i] = fabs(x_n[i]) + fabs(xDot_n[i][1] * Δ) + SCALE_BIAS;
         //*///--------------------------Using absolute and relative tolerance
 
-        /*------------------------------Using absolute and relative tolerance
-        if(K_max_main) LOOP(i,1,N_var) x_scale_n[i] = A_TOL + R_TOL * FMAX(fabs(x_n[i]), fabs(X_main[i][K_main]));
+        ///*------------------------------Using absolute and relative tolerance
+        if(odeSol.K_max)
+            LOOP(i,1,N_var) x_scale_n[i] = A_TOL + R_TOL * FMAX(fabs(x_n[i]), fabs(odeSol.X_matrix[i][odeSol.K]));
         else nrerror("NEED K_max_main != 0 IN ODE_driver.c");
         //*///--------------------------Using absolute and relative tolerance
 
@@ -74,7 +76,7 @@ void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ
 		(*rungeKutta_stepper)(x_n, xDot_n, N_var, &t_n, Δ, TOL, x_scale_n, &Δ_did, &Δ_next, f);
 		if (Δ_did == Δ) ++(*n_good); else ++(*n_bad);
 		
-		if ((t_n - t_2)*(t_2 - t_1) > 0.0)                          // done?
+		if ((t_n - t_2)*(t_2 - t_1) >= 0.0)                          // done?
 		{
 			LOOP(i, 1, N_var) x_0[i] = x_n[i];                  // modify IC
 			if (odeSol.K_max)
@@ -88,7 +90,13 @@ void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ
 			free_vector(x_scale_n, 1, N_var);
 			return;	
 		}
-		if (fabs(Δ_next) <= Δ_min) nrerror("STEP SIZE TOO SMALL IN ODE_driver.c: ");
+		if (fabs(Δ_next) <= Δ_min)
+		{
+		    printf("step number: %d\n", n_step);
+            printf("time: %f\n"       , t_n);
+            printf("next step: %f\n"  , Δ_next);
+            nrerror("STEP SIZE TOO SMALL IN ODE_driver.c: ");
+		}
         Δ = Δ_next;
 	}
 	nrerror("TOO MANY STEPS IN ODE_driver.c");

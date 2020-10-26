@@ -4,7 +4,10 @@
 
 #include "prototype_declarations.h"
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
+//----------------------------------------------------ODEsolution-------------------------------------------------------
 void ODEsolution_constructor(struct ODEsolution *odeSol, int maxCount, float precision, int x_dimension)
 {
     odeSol->K_max = maxCount;
@@ -40,8 +43,36 @@ void ODEsolution_print(struct ODEsolution *odeSol)
     }
 }
 
+void ODEsolution_printToFile(struct ODEsolution *odeSol)
+{
+    int i_1 = 0, i_2 = 0;
+
+    FILE *f_out;
+    f_out = fopen("output.txt", "w");
+
+    fprintf(f_out, "t: ");
+    LOOP(i_1, 1, odeSol->K_max) fprintf(f_out, "%f, ", odeSol->t_vector[i_1]);
+
+    fprintf(f_out, "\n");
+    LOOP(i_1,1,odeSol->x_dim)
+    {
+        fprintf(f_out, "x_%d: ", i_1);
+        LOOP(i_2, 1, odeSol->K_max)
+        {
+            fprintf(f_out,"%f, ", odeSol->X_matrix[i_1][i_2]);
+        }
+        fprintf(f_out,"\n");
+    }
 
 
+    if (fclose(f_out) != 0) nrerror("error in closing files");
+
+}
+//----------------------------------------------------ODEsolution-------------------------------------------------------
+
+
+
+//------------------------------------------------------ODE_IVP---------------------------------------------------------
 void ODE_IVP_constructor(struct ODE_IVP *odeIvp, int x_dimension,
         float inital_t, float final_t,float initialStep, float minStep, float tolerance)
 {
@@ -61,3 +92,4 @@ void ODE_IVP_destructor(struct ODE_IVP *odeIvp)
 {
     free_vector(odeIvp->x_0,1,odeIvp->N_var);
 }
+//------------------------------------------------------ODE_IVP---------------------------------------------------------

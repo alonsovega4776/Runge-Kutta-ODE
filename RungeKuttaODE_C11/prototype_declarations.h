@@ -8,6 +8,8 @@
 #include "nrutil.h"
 
 #define ORDER_PLUS1 6   // order of solver
+
+//----------------------------------------------------ODEsolution-------------------------------------------------------
 struct ODEsolution
 {
     int   K_max;
@@ -20,7 +22,11 @@ struct ODEsolution
 void ODEsolution_constructor(struct ODEsolution *odeSol, int maxCount, float precision, int x_dimension);
 void ODEsolution_destructor(struct ODEsolution *odeSol);
 void ODEsolution_print(struct ODEsolution *odeSol);
+void ODEsolution_printToFile(struct ODEsolution *odeSol);
+//----------------------------------------------------ODEsolution-------------------------------------------------------
 
+
+//------------------------------------------------------ODE_IVP---------------------------------------------------------
 struct ODE_IVP
 {
     float *x_0;
@@ -35,6 +41,7 @@ struct ODE_IVP
 };
 void ODE_IVP_constructor(struct ODE_IVP *odeIvp, int x_dimension, float inital_t, float final_t,float initialStep, float minStep, float tolerance);
 void ODE_IVP_destructor(struct ODE_IVP *odeIvp);
+//------------------------------------------------------ODE_IVP---------------------------------------------------------
 
 
 void f_ODE_IVP(float t, float x[], float **xDot, int function_number);

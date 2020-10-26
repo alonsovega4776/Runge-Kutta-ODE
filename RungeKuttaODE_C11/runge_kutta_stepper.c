@@ -42,8 +42,8 @@ void rungeKutta_stepper(float *x, float **xDot, int N, float *t, float Δ_try, f
     Δ = Δ_try;			// trial
 	while(1)
 	{
-        rungeKutta(x, xDot, N, *t, Δ, e, x_temp, f);	            // take a step
-		
+        rungeKutta(x, xDot, N, *t, Δ, x_temp, e, f);	            // take a step
+
 		ε = 0.0;										            // eval. acc. error
         LOOP(i,1,N) ε_vect[i] = e[i] / x_scale[i];
 
