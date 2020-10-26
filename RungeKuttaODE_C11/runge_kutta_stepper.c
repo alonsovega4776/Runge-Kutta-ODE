@@ -49,7 +49,7 @@ void rungeKutta_stepper(float *x, float **xDot, int N, float *t, float Δ_try, f
 
         ///*---------------------------------------Worst Offender
         LOOP(i,1,N) ε = FMAX(ε, fabs(ε_vect[i]));           // get worst error
-        //*/---------------------------------------Worst Offender
+        //*//---------------------------------------Worst Offender
 
         /*---------------------------------------L2 Norm
         ε = inner_product(ε_vect, ε_vect, N);

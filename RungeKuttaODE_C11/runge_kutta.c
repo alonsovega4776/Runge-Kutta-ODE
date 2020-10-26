@@ -59,8 +59,8 @@ void rungeKutta(float *x_n, float **xDot, int N, float t, float Δ, float *x_nPl
 
 	float **F;
 	F = matrix(1,N,1,ORDER_PLUS1);
-    LOOP(i_1,1,ORDER_PLUS1)
-        LOOP(i_2,1,N) F[i_1][i_2] = 0.0;
+    LOOP(i_1,1,N)
+        LOOP(i_2,1,ORDER_PLUS1) F[i_1][i_2] = 0.0;
     LOOP(i,1,N) F[i][1] = xDot[i][1];
 
     float *x_temp;

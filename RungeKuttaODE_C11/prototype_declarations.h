@@ -19,6 +19,7 @@ struct ODEsolution
 };
 void ODEsolution_constructor(struct ODEsolution *odeSol, int maxCount, float precision, int x_dimension);
 void ODEsolution_destructor(struct ODEsolution *odeSol);
+void ODEsolution_print(struct ODEsolution *odeSol);
 
 struct ODE_IVP
 {
@@ -29,8 +30,8 @@ struct ODE_IVP
     float TOL;
     float Δ_1;
     float Δ_min;
-    int *n_good;
-    int *n_bad;
+    int n_good;
+    int n_bad;
 };
 void ODE_IVP_constructor(struct ODE_IVP *odeIvp, int x_dimension, float inital_t, float final_t,float initialStep, float minStep, float tolerance);
 void ODE_IVP_destructor(struct ODE_IVP *odeIvp);

@@ -44,7 +44,8 @@ void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ
 
     t_n = t_1;
     Δ = SIGN(Δ_1, t_2 - t_1);
-    *n_good = (*n_bad) = odeSol.K = 0;
+    *n_good = (*n_bad) = 0;
+    odeSol.K = 0;
 	LOOP(i, 1, N_var) x_n[i] = x_0[i];
 
 	if (odeSol.K_max > 0) t_save = t_n - odeSol.dt * 2.0; // to save first step
@@ -87,7 +88,7 @@ void ODE_driver(float *x_0, int N_var, float t_1, float t_2, float TOL, float Δ
 			free_vector(x_scale_n, 1, N_var);
 			return;	
 		}
-		if (fabs(Δ_next) <= Δ_min) nrerror("STEP SIZE TOO SMALL IN ODE_driver.c");
+		if (fabs(Δ_next) <= Δ_min) nrerror("STEP SIZE TOO SMALL IN ODE_driver.c: ");
         Δ = Δ_next;
 	}
 	nrerror("TOO MANY STEPS IN ODE_driver.c");
